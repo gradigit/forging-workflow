@@ -1,62 +1,55 @@
 # Forging Workflow
 
-Claude Code agent skills for transforming rough ideas into implementation-ready prompts and plans. A structured, multi-phase pipeline with adaptive questioning, mandatory research, and adversarial challenge phases.
+Claude Code skills that take a rough idea and turn it into an implementation-ready prompt and plan. Instead of jumping straight into code from a vague description, these skills walk you through questions, research, and adversarial review first.
 
 ## Skills
 
 ### forging-plans
 
-Full prompt-to-plan pipeline for **new projects**. Operates in two modes:
+Full prompt-to-plan pipeline for **new projects**. Two modes:
 
-- **Mode 1 (Prompt Perfection)** — Runs in normal mode. Takes a rough idea through adaptive questionnaire, prior-art research, gap analysis, self-critique, and sub-agent adversarial review. Outputs a perfected prompt to `architect/prompt.md`.
-- **Mode 2 (Plan Iteration)** — Runs in plan mode. Takes Claude's draft plan and iterates on it with structured review, research, and adversarial challenge. Outputs a finalized plan to `architect/plan.md`.
+- **Mode 1 (Prompt Perfection)** — Runs in normal mode. Takes your rough idea through a questionnaire, prior-art research, gap analysis, and adversarial review. Writes the perfected prompt to `architect/prompt.md`.
+- **Mode 2 (Plan Iteration)** — Runs in plan mode. Takes Claude's draft plan and pressure-tests it with structured review and research. Writes the finalized plan to `architect/plan.md`.
 
-Also generates `CLAUDE.md` (persistent project context) and `TODO.md` (persistent task tracker) so execution survives context clears.
+Mode 1 also generates `CLAUDE.md` and `TODO.md` so execution state survives context clears.
 
 **Triggers**: `forge a plan`, `perfect this prompt`, `flesh out this idea`, `/forging-plans`
 
 ### forging-prompts
 
-Prompt perfection for **mid-project features** in forked sessions. Same pipeline as forging-plans Mode 1, but assumes project context is already loaded from the fork.
-
-Use when you're working on an existing project and want to add a well-specified feature without losing your current session context.
+Same pipeline as forging-plans Mode 1, but for **adding features to existing projects**. Designed for forked sessions where project context is already loaded — you fork your working session, forge the prompt, then go back and use it.
 
 **Triggers**: `forge a prompt`, `sharpen this prompt`, `flesh out this feature`, `/forging-prompts`
 
 ### forging-shared
 
-Shared reference files used by both skills:
+Reference files used by both skills:
 
 | File | Purpose |
 |------|---------|
-| `questionnaire.md` | Adaptive questionnaire protocol with 12 categories. Categories 1-3 always asked; 4-12 assessed for relevance |
-| `research.md` | Prior-art research protocol — official docs first, 2-year recency filter, cross-reference requirement |
-| `challenge.md` | Adversarial challenge protocol — Phase A (self-critique) + Phase B (sub-agent review) |
+| `questionnaire.md` | Adaptive questionnaire with 12 categories. 1-3 always asked; 4-12 assessed for relevance |
+| `research.md` | Prior-art research protocol — official docs first, 2-year recency filter, cross-referencing |
+| `challenge.md` | Adversarial review — self-critique (Phase A) then sub-agent review (Phase B) |
 
-## Depth Modes
+## Depth modes
 
-Both skills support two depth levels:
+Both skills support quick and full modes:
 
-- **Quick** — Core questions only (categories 1-3), skip research, self-critique only, one iteration. For small, well-understood features.
-- **Full** (default) — Full questionnaire, prior-art research, adversarial challenge with sub-agent. For complex or high-stakes work.
+- **Quick** — Core questions (categories 1-3), no research, self-critique only, one iteration. Good for small features you already understand well.
+- **Full** (default) — Full questionnaire, prior-art research, sub-agent adversarial review. Use this for anything complex or ambiguous.
 
 ## Installation
 
-Copy the skills into your Claude Code skills directory:
-
 ```bash
-# Clone the repo
 git clone https://github.com/gradigit/forging-workflow.git
 
-# Copy all three skill directories
+# All three directories are required (plans and prompts reference shared)
 cp -r forging-workflow/.claude/skills/forging-plans ~/.claude/skills/
 cp -r forging-workflow/.claude/skills/forging-prompts ~/.claude/skills/
 cp -r forging-workflow/.claude/skills/forging-shared ~/.claude/skills/
 ```
 
-All three directories must be installed together — forging-plans and forging-prompts reference forging-shared.
-
-## Typical Workflow
+## Typical workflow
 
 ### New project (forging-plans)
 
@@ -85,7 +78,7 @@ All three directories must be installed together — forging-plans and forging-p
 ## Dependencies
 
 - **Claude Code** with plan mode support
-- **study skill** (optional, from [claude-skills](https://github.com/gradigit/claude-skills)) — enhances research phase
+- **study skill** (optional, from [claude-skills](https://github.com/gradigit/claude-skills)) — improves the research phase
 
 ## License
 
